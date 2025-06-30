@@ -1,0 +1,219 @@
+{% extends 'carss/base.html' %}
+{% load static %}
+
+{% block content %}
+<style>
+    body {
+        font-family: 'Segoe UI', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 0;
+    }
+
+    .page-title {
+        text-align: center;
+        font-size: 2em;
+        margin: 40px 0 20px;
+    }
+
+    .car-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+        gap: 20px;
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 20px;
+    }
+
+    .car-card {
+        background-color: white;
+        border-radius: 10px;
+        box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+        transition: transform 0.2s ease;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .car-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .car-image {
+        width: 100%;
+        height: 180px;
+        object-fit: cover;
+    }
+
+    .car-content {
+        padding: 15px;
+        flex-grow: 1;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+
+    .car-content h3 {
+        margin: 0 0 10px;
+        font-size: 1.2em;
+    }
+
+    .car-content p {
+        margin: 5px 0;
+        color: #555;
+    }
+
+    .order-button {
+        margin-top: 15px;
+        padding: 10px;
+        background-color: #007bff;
+        color: white;
+        border: none;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+    }
+
+    .order-button:hover {
+        background-color: #0056b3;
+    }
+
+    .no-cars {
+        text-align: center;
+        color: #888;
+        margin-top: 50px;
+        font-size: 1.2em;
+    }
+
+    /* Modal Styles */
+    .modal {
+        position: fixed;
+        z-index: 999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0,0,0,0.5);
+        display: none;
+    }
+
+    .modal-content {
+        background: white;
+        margin: 10% auto;
+        padding: 25px;
+        width: 320px;
+        border-radius: 10px;
+        position: relative;
+        text-align: center;
+    }
+
+    .close {
+        position: absolute;
+        right: 12px;
+        top: 12px;
+        cursor: pointer;
+        font-size: 20px;
+        color: #888;
+    }
+
+    .modal-label {
+        display: block;
+        margin-bottom: 6px;
+        font-weight: bold;
+    }
+
+    .modal-input {
+        width: 100%;
+        padding: 8px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    .modal-buttons {
+        display: flex;
+        justify-content: space-between;
+        gap: 10px;
+    }
+
+    .btn-confirm, .btn-cancel {
+        flex: 1;
+        padding: 10px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+    }
+
+    .btn-confirm {
+        background-color: #28a745;
+        color: white;
+    }
+
+    .btn-cancel {
+        background-color: #dc3545;
+        color: white;
+    }
+</style>
+
+<h1 class="page-title">Available Cars for Rent</h1>
+
+{% if cars %}
+<div class="car-grid">
+    {% for car in cars %}
+    <div class="car-card">
+        {% if car.image %}
+        <img src="{{ car.image.url }}" alt="Car image" class="car-image">
+        {% else %}
+        <img src="{% static 'images/default-car.jpg' %}" alt="No image" class="car-image">
+        {% endif %}
+
+        <div class="car-content">
+            <div>
+                <h3>{{ car.make }} {{ car.model }} ({{ car.year }})</h3>
+                <p><strong>Location:</strong> {{ car.location }}</p>
+                <p><strong>Price:</strong> ${{ car.price_per_day }} / day</p>
+                <p>{{ car.description|truncatechars:100 }}</p>
+            </div>
+            <button class="order-button" onclick="openModal({{ car.id }})">Place Your Order</button>
+        </div>
+    </div>
+
+    <!-- Modal -->
+    <div id="modal-{{ car.id }}" class="modal">
+    <div class="modal-content">
+        <span onclick="closeModal({{ car.id }})" class="close">&times;</span>
+        <form action="{% url 'place_order' car.id %}" method="post">
+            {% csrf_token %}
+            <h3>Rent {{ car.make }} {{ car.model }}</h3>
+
+            <label for="start-date-{{ car.id }}" class="modal-label">Start Date:</label>
+            <input type="date" name="start_date" id="start-date-{{ car.id }}" required class="modal-input">
+
+            <label for="end-date-{{ car.id }}" class="modal-label">End Date:</label>
+            <input type="date" name="end_date" id="end-date-{{ car.id }}" required class="modal-input">
+
+            <p class="modal-confirm-text">Are you sure you want to place this order?</p>
+
+            <div class="modal-buttons">
+                <button type="submit" class="btn-confirm">Confirm</button>
+                <button type="button" onclick="closeModal({{ car.id }})" class="btn-cancel">Cancel</button>
+            </div>
+        </form>
+    </div>
+</div>
+    {% endfor %}
+</div>
+{% else %}
+<p class="no-cars">No cars available at the moment. Please check back later!</p>
+{% endif %}
+
+<script>
+    function openModal(carId) {
+        document.getElementById('modal-' + carId).style.display = 'block';
+    }
+
+    function closeModal(carId) {
+        document.getElementById('modal-' + carId).style.display = 'none';
+    }
+</script>
+{% endblock %}
