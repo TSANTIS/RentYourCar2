@@ -1,0 +1,83 @@
+{% if messages %}
+  <ul class="messages">
+    {% for message in messages %}
+      <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>
+        {{ message }}
+      </li>
+    {% endfor %}
+  </ul>
+{% endif %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" 
+      integrity="sha384-ENjdO4Dr2bkBIFxQpeoA6UGK4i2yI5fT7K27N6q0i4rhXQ5e40+iGmWUrj/kDf8D" crossorigin="anonymous">
+    <meta charset="UTF-8">
+    <title>RentYourCar</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+        }
+
+        .navbar {
+            background-color: #007bff;
+            color: white;
+            padding: 15px 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-left, .navbar-right {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .navbar a {
+            color: white;
+            text-decoration: none;
+            font-size: 16px;
+        }
+
+        .navbar a.logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .container {
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="navbar">
+    <div class="navbar-left">
+        <a href="{% url 'home' %}" class="logo" style="color: #ffffff; font-weight: bold; font-size: 24px; text-decoration: none;">
+    RentYourCar🚘
+</a>
+    </div>
+    <div class="navbar-right">
+        {% if user.is_authenticated %}
+            <span>Welcome, {{ user.username }}</span>
+            <a href="{% url 'logout' %}">Logout</a>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+</div>
+
+    <div class="container">
+        {% block content %}
+        {% endblock %}
+    </div>
+</body>
+<!-- Bootstrap JS Bundle -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" 
+        integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+Kwv9eLvBv7CfZRxOJO6qV5QBYTKyf" crossorigin="anonymous"></script>
+
+</html>
