@@ -1,0 +1,19 @@
+{% extends 'carss/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+  <div class="card shadow-lg border-0">
+    <div class="card-header bg-success text-white">
+      <h3 class="mb-0">✅ Order Placed Successfully!</h3>
+    </div>
+    <div class="card-body">
+      <p class="fs-5"><strong>Car:</strong> {{ order.car }}</p>
+      <p class="fs-5"><strong>Rental Period:</strong> {{ order.start_date }} to {{ order.end_date }}</p>
+      <p class="fs-5"><strong>Total Price:</strong> <span class="text-success">${{ order.total_price }}</span></p>
+    </div>
+    <div class="card-footer text-end">
+      <a href="{% url 'browse_cars' %}" class="btn btn-outline-primary">Place Another Order</a>
+    </div>
+  </div>
+</div>
+{% endblock %}
