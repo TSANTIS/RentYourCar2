@@ -37,4 +37,8 @@
 ![Screenshot_121](https://github.com/user-attachments/assets/8b130b65-8052-46af-8c43-5da13d92bc0f)
 ![Screenshot_122](https://github.com/user-attachments/assets/ec17e197-869c-4677-b975-bc4f0224c62d)
 ![Screenshot_123](https://github.com/user-attachments/assets/5c4e3af1-d749-42e5-a31e-d060986d013a)
-
+6 Λειτουργία: Επιστροφή στην αρχικη σελλίδα Περιγραφή: Σε οποιο διαφορετικό url και να είσαι στην σελλίδα πανω αριστερά πατας το logo και επιστρέφει στο homepage
+Είσοδος χρήστη: κλικ στο κουμπί RentYourCar
+Έξοδος: redirect στο homepage
+![Screenshot_124](https://github.com/user-attachments/assets/65b056dd-cbda-4a3d-9e06-3435a14f939c)
+![Screenshot_125](https://github.com/user-attachments/assets/5adddde2-3a8f-4911-b150-5039b391dbb9)
